@@ -1,0 +1,2 @@
+# TemplateStructureAndroid
+TemplateStructureAndroid
