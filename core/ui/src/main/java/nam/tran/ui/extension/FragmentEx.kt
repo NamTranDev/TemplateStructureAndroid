@@ -4,6 +4,11 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 fun Fragment.showKeyboard(){
     val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -20,4 +25,14 @@ fun FragmentManager.getRootFragment(): Fragment? {
         return fragments[0]
     }
     return null
+}
+
+fun <T> Fragment.observeFlow(flow: Flow<T>, collector: suspend (T) -> Unit) {
+    lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            flow.collect { data ->
+                collector(data)
+            }
+        }
+    }
 }
