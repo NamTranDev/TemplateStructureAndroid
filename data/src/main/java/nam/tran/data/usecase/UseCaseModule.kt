@@ -16,7 +16,7 @@ abstract class UseCaseModule {
     @Binds
     @ActivityRetainedScoped
     @HomeUseCaseQualifier
-    abstract fun bindHomeUseCase(
-        homeUseCaseImpl: HomeUseCaseImpl
+    abstract fun bindUseCase(
+        useCaseImpl: HomeUseCaseImpl
     ): HomeUseCase
 }

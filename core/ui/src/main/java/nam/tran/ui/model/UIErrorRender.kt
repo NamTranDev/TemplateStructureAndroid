@@ -1,9 +1,9 @@
 package nam.tran.ui.model
 
-import nam.tran.common.error.CommonErrorException
+import java.lang.Exception
 
 data class UIErrorRender(
-    val error: CommonErrorException? = null,
+    val error: Throwable? = null,
     val closeActivity: Boolean = false,
     val retry: (() -> Unit)? = null,
     val afterRender: (() -> Unit)? = null,

@@ -19,6 +19,7 @@ import javax.inject.Inject
 class GlideAppModule : AppGlideModule() {
 
     @Inject
+    @GlideOkHttpClient
     lateinit var okHttpClient: OkHttpClient
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {

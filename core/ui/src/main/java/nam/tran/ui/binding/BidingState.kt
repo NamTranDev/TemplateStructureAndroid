@@ -4,81 +4,106 @@ import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import nam.tran.common.state.State
+import nam.tran.ui.extension.singleClick
+import nam.tran.ui.model.TypeStateView
 import nam.tran.ui.model.UIErrorRender
+import nam.tran.ui.state.UIState
 import nam.tran.ui.view.BaseActivity
+import nam.tran.ui.view.BehaviorActionController
 
 object BidingState {
 
     @JvmStatic
-    @BindingAdapter("app:visibleView")
-    fun visibleView(view: View, state: State?) {
+    @BindingAdapter(
+        value = ["app:state", "app:type_view"],
+        requireAll = true
+    )
+    fun renderState(view: View?, state: UIState?, typeUI: TypeStateView?) {
+        view ?: return
+        state ?: return
         when (state) {
-            is State.Error -> {
-                (view.context as? BaseActivity)?.alert(UIErrorRender(error = state.error))
+            is UIState.Loading -> {
+                renderLoading(view,typeUI)
             }
-            is State.Loading -> {
-                view.visibility = View.GONE
+
+            is UIState.Success -> {
+                renderSuccess(view,typeUI)
             }
-            is State.Success -> view.visibility = View.VISIBLE
+
+            is UIState.Error -> {
+                renderError(view,state,typeUI)
+            }
+
             else -> {}
         }
     }
 
-    @JvmStatic
-    @BindingAdapter("app:refreshView")
-    fun refreshView(view: SwipeRefreshLayout, state: State?) {
-        when (state) {
-            is State.Loading -> view.isRefreshing = true
-            is State.Error, is State.Success -> view.isRefreshing = false
+    private fun renderLoading(view: View, typeUI: TypeStateView?) {
+        when (typeUI) {
+            TypeStateView.PROGRESS -> view.visibility = View.VISIBLE
+            TypeStateView.CONTAIN_VIEW,
+            TypeStateView.TEXT_ERROR,
+            TypeStateView.BUTTON_ERROR -> view.visibility = View.GONE
+            TypeStateView.REFRESH -> (view as? SwipeRefreshLayout)?.isRefreshing = true
             else -> {}
         }
     }
 
-    @JvmStatic
-    @BindingAdapter("app:visibleProgress")
-    fun visibleProgress(view: View, state: State?) {
-        when (state) {
-            is State.Error, is State.Success -> view.visibility = View.GONE
-            is State.Loading -> {
+    private fun renderSuccess(view: View, typeUI: TypeStateView?) {
+        when (typeUI) {
+            TypeStateView.CONTAIN_VIEW -> view.visibility = View.VISIBLE
+            TypeStateView.PROGRESS,
+            TypeStateView.TEXT_ERROR,
+            TypeStateView.BUTTON_ERROR -> view.visibility = View.GONE
+            TypeStateView.REFRESH -> (view as? SwipeRefreshLayout)?.isRefreshing = false
+            else -> {}
+        }
+    }
+
+    private fun renderError(view: View, state: UIState.Error, typeUI: TypeStateView?) {
+        when (typeUI) {
+            TypeStateView.TEXT_ERROR -> {
                 view.visibility = View.VISIBLE
+                (view as? TextView)?.text = state.error?.message
             }
+            TypeStateView.BUTTON_ERROR -> {
+                view.visibility = View.VISIBLE
+                view.singleClick {
+                    state.retry?.invoke()
+                }
+            }
+            TypeStateView.CONTAIN_VIEW,
+            TypeStateView.PROGRESS -> view.visibility = View.GONE
 
+            TypeStateView.REFRESH -> (view as? SwipeRefreshLayout)?.isRefreshing = false
             else -> {}
         }
     }
 
     @JvmStatic
     @BindingAdapter(
-        value = ["app:visibleTextError"],
-        requireAll = false
+        value = ["app:state_paging", "app:type_view"], requireAll = false
     )
-    fun visibleTextError(text: TextView, state: State?) {
-        when (state) {
-            is State.Error -> {
-                text.visibility = View.VISIBLE
-                text.text = state.error?.message
+    fun renderStatePaging(view: View?, state: UIState?, typeUI: TypeStateView?) {
+        view ?: return
+        state ?: return
+        when (typeUI) {
+            TypeStateView.PROGRESS -> {
+                view.visibility = if (state is UIState.LoadingPaging) View.VISIBLE else View.GONE
             }
-            is State.Loading, is State.Success -> text.visibility = View.GONE
-            else -> {}
-        }
-    }
 
-    @JvmStatic
-    @BindingAdapter("app:visibleButtonError")
-    fun visibleButtonError(bt: View, state: State?) {
-        when (state) {
-            is State.Error -> {
-                if (state.hasRefresh) {
-                    bt.visibility = View.GONE
-                } else {
-                    bt.visibility = View.VISIBLE
-                    bt.setOnClickListener {
-                        state.retry?.invoke()
-                    }
+            TypeStateView.TEXT_ERROR -> {
+                view.visibility = if (state is UIState.ErrorPaging) View.VISIBLE else View.GONE
+                (view as? TextView)?.text = (state as? UIState.ErrorPaging)?.error?.message
+            }
+
+            TypeStateView.BUTTON_ERROR -> {
+                view.visibility = if (state is UIState.ErrorPaging) View.VISIBLE else View.GONE
+                view.singleClick {
+                    (state as? UIState.ErrorPaging)?.retry?.invoke()
                 }
             }
-            is State.Loading, is State.Success -> bt.visibility = View.GONE
+
             else -> {}
         }
     }

@@ -1,3 +1,7 @@
 package nam.tran.data.usecase.home
 
-interface HomeUseCase
+import kotlinx.coroutines.flow.Flow
+
+interface HomeUseCase{
+    fun testFlow() : Flow<Boolean>
+}

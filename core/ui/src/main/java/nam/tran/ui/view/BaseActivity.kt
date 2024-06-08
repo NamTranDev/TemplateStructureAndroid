@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import nam.tran.common.Logger
-import nam.tran.common.error.CommonErrorException
 import nam.tran.ui.R
 import nam.tran.ui.extension.getRootFragment
 import nam.tran.ui.extension.forceHideKeyboard
@@ -94,7 +93,7 @@ abstract class BaseActivity : AppCompatActivity(), BehaviorActionController {
         loadingDialog.hideDialog()
     }
 
-    open fun alert(
+    override fun alertError(
         data : UIErrorRender?
     ) {
         val alertDialog = AlertDialog.Builder(this)

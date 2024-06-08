@@ -1,7 +1,6 @@
 package nam.tran.data.network
 
 import android.app.Application
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides

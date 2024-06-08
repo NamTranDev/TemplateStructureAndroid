@@ -13,6 +13,7 @@ class GlideModule {
 
     @Provides
     @Singleton
+    @GlideOkHttpClient
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .build()

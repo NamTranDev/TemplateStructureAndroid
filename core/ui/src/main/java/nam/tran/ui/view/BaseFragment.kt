@@ -10,15 +10,12 @@ import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import nam.tran.common.Logger
-import nam.tran.common.error.CommonErrorException
 import nam.tran.ui.R
 import nam.tran.ui.extension.autoCleared
-import nam.tran.ui.model.UIErrorRender
 import java.lang.ref.WeakReference
 
-abstract class BaseFragment<V : ViewDataBinding> : Fragment(), RenderController,ViewLoadingController {
+abstract class BaseFragment<V : ViewDataBinding> : Fragment(), RenderController {
 
     protected abstract val layoutId: Int
 
@@ -34,14 +31,14 @@ abstract class BaseFragment<V : ViewDataBinding> : Fragment(), RenderController,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Logger.debug("Screen --- ",javaClass.name)
+        Logger.debug("Screen --- ", javaClass.name)
         mViewBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         return mViewBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (isAnimationTransfer) {
+        if (!isAnimationTransfer) {
             view.postDelayed({
                 onRenderComplete(arguments, false)
             }, timeDelay())
@@ -93,17 +90,5 @@ abstract class BaseFragment<V : ViewDataBinding> : Fragment(), RenderController,
 
     fun timeDelay(): Long {
         return resources.getInteger(R.integer.animation_time_full).toLong()
-    }
-
-    override fun showDialogLoading() {
-        (activity as? BaseActivity)?.showDialogLoading()
-    }
-
-    override fun hideDialogLoading() {
-        (activity as? BaseActivity)?.hideDialogLoading()
-    }
-
-    override fun onShowDialogError(renderUI : UIErrorRender?) {
-        (activity as? BaseActivity)?.alert(renderUI)
     }
 }
