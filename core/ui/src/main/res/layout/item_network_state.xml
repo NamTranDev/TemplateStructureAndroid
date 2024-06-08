@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="state"
+            type="nam.tran.ui.state.UIState" />
+        <import type="nam.tran.ui.model.TypeStateView"/>
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/positive_5dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/error_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_12sp"
+            app:state_paging="@{state}"
+            app:type_view="@{TypeStateView.TEXT_ERROR}"
+            tools:text="Error"/>
+
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            android:layout_width="@dimen/progress_width_height"
+            android:layout_height="@dimen/progress_width_height"
+            android:indeterminateDrawable="@drawable/loading_style_dialog"
+            app:state_paging="@{state}"
+            app:type_view="@{TypeStateView.PROGRESS}"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/retry_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/positive_5dp"
+            android:paddingStart="@dimen/positive_20dp"
+            android:paddingEnd="@dimen/positive_20dp"
+            android:paddingTop="@dimen/positive_10dp"
+            android:paddingBottom="@dimen/positive_10dp"
+            android:text="@string/bt_retry"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:textSize="@dimen/text_size_15sp"
+            app:state_paging="@{state}"
+            app:type_view="@{TypeStateView.BUTTON_ERROR}"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
+
