@@ -23,22 +23,22 @@ import androidx.recyclerview.widget.DiffUtil
 import android.view.ViewGroup
 import java.util.concurrent.Executors
 
-abstract class DataBoundListAdapter<T>(
+abstract class DataBoundListAdapter<T,V : ViewDataBinding>(
     diffCallback: DiffUtil.ItemCallback<T>
-) : ListAdapter<T, DataBoundViewHolder<ViewDataBinding>>(
+) : ListAdapter<T, DataBoundViewHolder<V>>(
     AsyncDifferConfig.Builder(diffCallback)
         .setBackgroundThreadExecutor(Executors.newSingleThreadExecutor())
         .build()
 ) {
 
-    abstract fun onCreateItemHolder(parent: ViewGroup, viewType: Int): ViewDataBinding
+    abstract fun onCreateItemHolder(parent: ViewGroup, viewType: Int): V
     abstract fun onBindItemHolder(holder: DataBoundViewHolder<ViewDataBinding>, position: Int)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<ViewDataBinding> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBoundViewHolder<V> {
         return DataBoundViewHolder(onCreateItemHolder(parent, viewType))
     }
 
-    override fun onBindViewHolder(holder: DataBoundViewHolder<ViewDataBinding>, position: Int) {
+    override fun onBindViewHolder(holder: DataBoundViewHolder<V>, position: Int) {
         onBindItemHolder(holder, position)
         holder.binding.executePendingBindings()
     }
