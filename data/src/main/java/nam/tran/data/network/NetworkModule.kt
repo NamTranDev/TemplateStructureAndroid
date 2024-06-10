@@ -11,7 +11,7 @@ import nam.tran.common.BuildConfig
 import nam.tran.common.Constant
 import nam.tran.data.model.response.BaseResponse
 import nam.tran.data.network.api.ApiServices
-import nam.tran.data.network.api.ApiServicesDefault
+import nam.tran.data.network.api.PokemonApi
 import nam.tran.data.preference.StorePreference
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -87,7 +87,7 @@ class NetworkModule{
 
     @Provides
     @Singleton
-    fun makeServiceApiDefault(retrofit: Retrofit): ApiServicesDefault {
-        return retrofit.create(ApiServicesDefault::class.java)
+    fun makeServiceApiDefault(retrofit: Retrofit): PokemonApi {
+        return retrofit.create(PokemonApi::class.java)
     }
 }

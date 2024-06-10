@@ -27,7 +27,7 @@ class HomeFragment : BaseFragmentVM<FragmentHomeBinding>(){
         super.onViewCreated(view, savedInstanceState)
 
         observeFlow(mViewModel.dataFlow){
-            Logger.debug(it)
+            mViewBinding?.tvText?.text = it.toString()
         }
     }
 }
