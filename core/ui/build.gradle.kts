@@ -39,6 +39,7 @@ dependencies {
     api("androidx.constraintlayout:constraintlayout:2.1.4")
     api("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    api("androidx.paging:paging-runtime-ktx:3.3.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
     ksp("com.github.bumptech.glide:ksp:4.14.2")
     implementation("com.github.bumptech.glide:okhttp3-integration:4.11.0") {

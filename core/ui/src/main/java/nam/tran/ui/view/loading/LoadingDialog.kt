@@ -1,4 +1,4 @@
-package nam.tran.ui.loading
+package nam.tran.ui.view.loading
 
 import android.app.Dialog
 import android.view.Gravity
