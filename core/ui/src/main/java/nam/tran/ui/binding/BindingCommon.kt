@@ -1,19 +1,24 @@
 package nam.tran.ui.binding
 
+import android.R
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import nam.tran.common.Logger
 import java.io.File
+
 
 object BindingCommon {
 
@@ -24,8 +29,18 @@ object BindingCommon {
     fun loadImageFromLink(view: ImageView?, linkImage: String?, srcImageDefault: Drawable? = null) {
         view ?: return
         linkImage?.run {
-            Glide.with(view).load(linkImage).diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).error(srcImageDefault).listener(object : RequestListener<Drawable> {
+            val circularProgressDrawable = CircularProgressDrawable(view.context)
+            circularProgressDrawable.strokeWidth = 2f
+            circularProgressDrawable.centerRadius = 30f
+            circularProgressDrawable.start()
+
+            val requestOptions = RequestOptions().placeholder(circularProgressDrawable)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).fitCenter().error(srcImageDefault)
+
+            Glide.with(view).load(linkImage)
+                .apply(requestOptions)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
