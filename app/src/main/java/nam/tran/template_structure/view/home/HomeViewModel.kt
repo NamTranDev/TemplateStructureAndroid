@@ -22,7 +22,7 @@ class HomeViewModel @Inject constructor(
 
     override fun onLoad(bundle: Bundle?, isRefresh: Boolean) {
         if (_dataFlow.value == null){
-            execution(useCase.testFlow()) {
+            execution(flow = useCase.testFlow()) {
                 _dataFlow.value = it
             }
         }
