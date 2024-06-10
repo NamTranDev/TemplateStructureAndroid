@@ -14,8 +14,8 @@ import nam.tran.common.Logger
 import nam.tran.ui.R
 import nam.tran.ui.extension.getRootFragment
 import nam.tran.ui.extension.forceHideKeyboard
-import nam.tran.ui.loading.LoadingController
-import nam.tran.ui.loading.LoadingDialog
+import nam.tran.ui.view.loading.LoadingController
+import nam.tran.ui.view.loading.LoadingDialog
 import nam.tran.ui.model.UIErrorRender
 import java.lang.ref.WeakReference
 

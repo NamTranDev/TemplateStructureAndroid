@@ -1,4 +1,4 @@
-package nam.tran.ui.loading
+package nam.tran.ui.view.loading
 
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
