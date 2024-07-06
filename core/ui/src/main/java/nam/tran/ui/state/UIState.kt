@@ -1,7 +1,5 @@
 package nam.tran.ui.state
 
-import java.lang.Exception
-
 sealed class UIState(val action : String? = null){
     var initial = true
     var hasRefresh: Boolean = false

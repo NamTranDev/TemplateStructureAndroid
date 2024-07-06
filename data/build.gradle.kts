@@ -44,6 +44,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
 
+    implementation("androidx.paging:paging-runtime-ktx:3.3.0")
+
     //Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version")

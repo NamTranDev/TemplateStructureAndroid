@@ -31,7 +31,6 @@
             android:id="@+id/progress_loading"
             android:layout_width="@dimen/progress_width_height"
             android:layout_height="@dimen/progress_width_height"
-            android:indeterminateDrawable="@drawable/loading_style_dialog"
             app:state_paging="@{state}"
             app:type_view="@{TypeStateView.PROGRESS}"/>
 

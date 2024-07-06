@@ -38,7 +38,7 @@ abstract class BaseActivity : AppCompatActivity(), BehaviorActionController {
                     return
                 } else {
                     isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
+                    onBackAction()
                     isEnabled = true
                 }
             }
@@ -46,6 +46,8 @@ abstract class BaseActivity : AppCompatActivity(), BehaviorActionController {
     }
 
     open fun setStatusBar() {}
+
+    open fun onBackAction(){}
 
     override fun onDestroy() {
         loadingDialog.cancelDialog()
