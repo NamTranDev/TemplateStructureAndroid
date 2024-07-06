@@ -3,15 +3,12 @@ package nam.tran.ui.view
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import nam.tran.ui.extension.hideKeyboard
-import nam.tran.ui.extension.observeFlow
 import nam.tran.ui.model.UIErrorRender
 import nam.tran.ui.state.TypeState
 import nam.tran.ui.state.UIState
@@ -27,8 +24,20 @@ abstract class BaseFragmentVM<V : ViewDataBinding> : BaseFragment<V>(), ViewLoad
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeFlow(mViewModel.stateFlow) {
-            renderState(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mViewModel.eventUIState.collectLatest { state ->
+                    when(state){
+                        is UIState.Nothing -> {
+                            // No action
+                        }
+                        else -> {
+                            renderState(state)
+                            mViewModel.resetUiState()
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -67,14 +76,14 @@ abstract class BaseFragmentVM<V : ViewDataBinding> : BaseFragment<V>(), ViewLoad
 
     override fun showDialogLoading() {
         hideKeyboard()
-        (activity as? BaseActivity)?.showDialogLoading()
+        (activity as? BehaviorActionController)?.showDialogLoading()
     }
 
     override fun hideDialogLoading() {
-        (activity as? BaseActivity)?.hideDialogLoading()
+        (activity as? BehaviorActionController)?.hideDialogLoading()
     }
 
     override fun onShowDialogError(renderUI: UIErrorRender?) {
-        (activity as? BaseActivity)?.alertError(renderUI)
+        (activity as? BehaviorActionController)?.alertError(renderUI)
     }
 }
